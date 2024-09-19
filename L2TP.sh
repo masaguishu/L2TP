@@ -9,6 +9,7 @@ apt install -y xl2tpd strongswan
 # 生成随机用户名和密码
 USERNAME="user$(tr -dc A-Za-z0-9 </dev/urandom | head -c 8)"
 PASSWORD="$(tr -dc A-Za-z0-9 </dev/urandom | head -c 12)"
+SHARED_SECRET="shared$(tr -dc A-Za-z0-9 </dev/urandom | head -c 8)"
 
 # 手动输入公网IP
 read -p "请输入您的公网IP: " PUBLIC_IP
@@ -62,6 +63,7 @@ EOF
 # 设置IPsec用户和密码
 cat <<EOF >> /etc/ipsec.secrets
 $USERNAME : XAUTH "$PASSWORD"
+$PUBLIC_IP : PSK "$SHARED_SECRET"
 EOF
 
 # 启动服务
@@ -73,5 +75,6 @@ echo "L2TP server configured. Please use the following settings:"
 echo "VPS IP: $PUBLIC_IP"
 echo "Username: $USERNAME"
 echo "Password: $PASSWORD"
+echo "Shared Secret: $SHARED_SECRET"
 echo "L2TP local IP: $PUBLIC_IP"
 echo "L2TP IP range: 192.168.1.2-192.168.1.100"
