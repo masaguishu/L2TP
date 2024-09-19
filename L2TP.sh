@@ -26,7 +26,7 @@ EOF
 cat <<EOF > /etc/xl2tpd/xl2tpd.conf
 [global]
 ip range = 192.168.1.2-192.168.1.100
-local ip = $PUBLIC_IP
+local ip = 192.168.1.1
 refuse chap = yes
 refuse pap = yes
 require authentication = yes
@@ -35,8 +35,8 @@ ppp debug = yes
 pppoptfile = /etc/ppp/options.xl2tpd
 
 [lns default]
-ip = $PUBLIC_IP
-local ip = $PUBLIC_IP
+ip = 192.168.1.1
+local ip = 192.168.1.1
 refuse chap = yes
 refuse pap = yes
 require authentication = yes
@@ -76,5 +76,5 @@ echo "VPS IP: $PUBLIC_IP"
 echo "Username: $USERNAME"
 echo "Password: $PASSWORD"
 echo "Shared Secret: $SHARED_SECRET"
-echo "L2TP local IP: $PUBLIC_IP"
+echo "L2TP local IP: 192.168.1.1"
 echo "L2TP IP range: 192.168.1.2-192.168.1.100"
