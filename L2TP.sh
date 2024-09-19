@@ -10,6 +10,9 @@ apt install -y xl2tpd strongswan
 USERNAME="user$(tr -dc A-Za-z0-9 </dev/urandom | head -c 8)"
 PASSWORD="$(tr -dc A-Za-z0-9 </dev/urandom | head -c 12)"
 
+# 获取公网IP
+PUBLIC_IP="$(curl -s ifconfig.me)"
+
 # 配置IPsec
 cat <<EOF > /etc/ipsec.conf
 config setup
@@ -22,7 +25,7 @@ EOF
 cat <<EOF > /etc/xl2tpd/xl2tpd.conf
 [global]
 ip range = 192.168.1.2-192.168.1.100
-local ip = 192.168.1.1
+local ip = $PUBLIC_IP
 refuse chap = yes
 refuse pap = yes
 require authentication = yes
@@ -31,8 +34,8 @@ ppp debug = yes
 pppoptfile = /etc/ppp/options.xl2tpd
 
 [lns default]
-ip = 192.168.1.1
-local ip = 192.168.1.1
+ip = $PUBLIC_IP
+local ip = $PUBLIC_IP
 refuse chap = yes
 refuse pap = yes
 require authentication = yes
@@ -67,8 +70,8 @@ systemctl restart xl2tpd
 
 # 输出配置信息
 echo "L2TP server configured. Please use the following settings:"
-echo "VPS IP: $(hostname -I | awk '{print $1}')"
+echo "VPS IP: $PUBLIC_IP"
 echo "Username: $USERNAME"
 echo "Password: $PASSWORD"
-echo "L2TP local IP: 192.168.1.1"
+echo "L2TP local IP: $PUBLIC_IP"
 echo "L2TP IP range: 192.168.1.2-192.168.1.100"
