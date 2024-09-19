@@ -10,8 +10,8 @@ apt install -y xl2tpd strongswan
 USERNAME="user$(tr -dc A-Za-z0-9 </dev/urandom | head -c 8)"
 PASSWORD="$(tr -dc A-Za-z0-9 </dev/urandom | head -c 12)"
 
-# 获取公网IP
-PUBLIC_IP="$(curl -s ifconfig.me)"
+# 手动输入公网IP
+read -p "请输入您的公网IP: " PUBLIC_IP
 
 # 配置IPsec
 cat <<EOF > /etc/ipsec.conf
